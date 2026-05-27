@@ -1,4 +1,6 @@
 import { AdminPanel } from './AdminPanel'
+import { CalendarPage } from './CalendarPage'
+import { ChartsPage } from './ChartsPage'
 import { Dashboard } from './Dashboard'
 import { Settings } from './Settings'
 import { ThemeToggle } from './ThemeToggle'
@@ -9,7 +11,7 @@ import type { NavigateTo, ThemeSetter } from '../types'
 interface WorkspaceProps {
   darkMode: boolean
   setDarkMode: ThemeSetter
-  view: 'dashboard' | 'settings' | 'admin'
+  view: 'dashboard' | 'calendar' | 'charts' | 'settings' | 'admin'
   goTo: NavigateTo
 }
 
@@ -40,6 +42,12 @@ export function Workspace({ darkMode, setDarkMode, view, goTo }: WorkspaceProps)
           <button className={view === 'dashboard' ? 'active' : ''} type="button" onClick={() => goTo('dashboard')}>
             Tarefas
           </button>
+          <button className={view === 'calendar' ? 'active' : ''} type="button" onClick={() => goTo('calendar')}>
+            Calendario
+          </button>
+          <button className={view === 'charts' ? 'active' : ''} type="button" onClick={() => goTo('charts')}>
+            Graficos
+          </button>
           <button className={view === 'settings' ? 'active' : ''} type="button" onClick={() => goTo('settings')}>
             Configuracoes
           </button>
@@ -68,6 +76,8 @@ export function Workspace({ darkMode, setDarkMode, view, goTo }: WorkspaceProps)
         </header>
 
         {view === 'dashboard' && <Dashboard user={currentUser} />}
+        {view === 'calendar' && <CalendarPage user={currentUser} />}
+        {view === 'charts' && <ChartsPage user={currentUser} />}
         {view === 'settings' && <Settings onLogout={handleLogout} />}
         {view === 'admin' && <AdminPanel />}
       </div>
@@ -75,8 +85,10 @@ export function Workspace({ darkMode, setDarkMode, view, goTo }: WorkspaceProps)
   )
 }
 
-function getPageTitle(view: 'dashboard' | 'settings' | 'admin') {
+function getPageTitle(view: 'dashboard' | 'calendar' | 'charts' | 'settings' | 'admin') {
   if (view === 'settings') return 'Configuracoes'
   if (view === 'admin') return 'Painel admin'
+  if (view === 'calendar') return 'Calendario'
+  if (view === 'charts') return 'Graficos'
   return 'Minhas tarefas'
 }

@@ -16,8 +16,12 @@ export function Login({ goTo }: LoginProps) {
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
-    const success = login(email.trim(), password)
-    if (!success) setError('E-mail ou senha incorretos.')
+    const result = login(email.trim(), password)
+    if (!result.success) {
+      setError(result.message ?? 'E-mail ou senha incorretos.')
+      return
+    }
+    setError('')
   }
 
   return (

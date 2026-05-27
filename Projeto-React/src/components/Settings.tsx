@@ -1,15 +1,17 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { PasswordField } from './PasswordField'
+import { PasswordStrengthMeter } from './PasswordStrengthMeter'
 import { DEFAULT_AVATAR } from '../constants'
 import { useAuth } from '../context/AuthContext'
+import { formatDateTime, formatDurationFrom } from '../security'
 
 interface SettingsProps {
   onLogout: () => void
 }
 
 export function Settings({ onLogout }: SettingsProps) {
-  const { currentUser, updateUser } = useAuth()
+  const { currentUser, sessionStartedAt, updateUser } = useAuth()
   const [username, setUsername] = useState(currentUser?.username ?? '')
   const [email, setEmail] = useState(currentUser?.email ?? '')
   const [password, setPassword] = useState(currentUser?.password ?? '')
@@ -49,6 +51,7 @@ export function Settings({ onLogout }: SettingsProps) {
           Alterar senha
           <PasswordField value={password} onChange={setPassword} />
         </label>
+        <PasswordStrengthMeter password={password} />
 
         <label>
           Alterar foto/avatar
@@ -66,6 +69,20 @@ export function Settings({ onLogout }: SettingsProps) {
           </button>
         </div>
       </form>
+
+      <div className="security-summary">
+        <p className="eyebrow">Sessao ativa</p>
+        <div className="security-metric-grid">
+          <div className="security-metric">
+            <span>Inicio</span>
+            <strong>{sessionStartedAt ? formatDateTime(sessionStartedAt) : 'Nao identificado'}</strong>
+          </div>
+          <div className="security-metric">
+            <span>Tempo ativa</span>
+            <strong>{formatDurationFrom(sessionStartedAt)}</strong>
+          </div>
+        </div>
+      </div>
     </section>
   )
 }

@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { PasswordField } from './PasswordField'
+import { PasswordStrengthMeter } from './PasswordStrengthMeter'
 import { useAuth } from '../context/AuthContext'
+import { evaluatePasswordStrength } from '../security'
 import type { NavigateTo } from '../types'
 
 interface RegisterProps {
@@ -24,6 +26,11 @@ export function Register({ goTo }: RegisterProps) {
 
     if (password !== confirmPassword) {
       setError('As senhas precisam ser iguais.')
+      return
+    }
+
+    if (evaluatePasswordStrength(password).level === 'weak') {
+      setError('Use uma senha media ou forte para concluir o cadastro.')
       return
     }
 
@@ -60,6 +67,7 @@ export function Register({ goTo }: RegisterProps) {
         Senha
         <PasswordField value={password} onChange={setPassword} />
       </label>
+      <PasswordStrengthMeter password={password} />
 
       <label>
         Confirmar senha

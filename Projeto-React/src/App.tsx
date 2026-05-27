@@ -18,7 +18,7 @@ function App() {
         <Workspace
           darkMode={darkMode}
           setDarkMode={setDarkMode}
-          view={view === 'settings' || view === 'admin' ? view : 'dashboard'}
+          view={view === 'settings' || view === 'admin' || view === 'calendar' || view === 'charts' ? view : 'dashboard'}
           goTo={goTo}
         />
       ) : (
